@@ -91,6 +91,8 @@ DATABASES = {
     }
 }
 
+# todo django认证系统使用的模型类
+AUTH_USER_MODEL = 'user.User'
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
