@@ -150,3 +150,19 @@ EMAIL_HOST_USER = 'openppr@163.com'
 EMAIL_HOST_PASSWORD = 'df123456'
 #收件人看到的发件人
 EMAIL_FROM = 'dailyfresh<openppr@163.com>'
+
+
+# Django的缓存配置
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://192.168.199.129:6379/9",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# 配置session存储
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
