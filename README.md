@@ -42,7 +42,7 @@
 		pymysql.install_as_MySQLdb(）
    	4.远程授权登录mysql
         	在数据库服务器输入: grant all privileges on 数据库名.* to '用户名'@'客户端ip' with grant option;
-	5.c:
+	5.Django2.1用户认证系统authenticate()一直返回None:
 		import django.contrib.auth.hashers import check_password,  make_password
 		使用User.objects.cteate_user()创建用户，并在调用user.save()保存用户信息之前: user.password = make_password(password)
 		在验证用户登录处：
