@@ -34,12 +34,28 @@
     1	# python --version
     2	Python 2.7.8
     
-## Django2.0 
-    1.urlpattern中要使用xxview.as_view()
+## Django2.1 
+    	1.urlpattern中要使用xxview.as_view()
 	2.使用外键的地方foreignkey要加上on_delete=models.CASCADE
 	3.使用pymysql要在__init__.py中加上
 		import pymysql
 		pymysql.install_as_MySQLdb(）
-    4.远程授权登录mysql
-        在数据库服务器输入: grant all privileges on 数据库名.* to '用户名'@'客户端ip' with grant option;
+   	4.远程授权登录mysql
+        	在数据库服务器输入: grant all privileges on 数据库名.* to '用户名'@'客户端ip' with grant option;
+	5.c:
+		import django.contrib.auth.hashers import check_password,  make_password
+		使用User.objects.cteate_user()创建用户，并在调用user.save()保存用户信息之前: user.password = make_password(password)
+		在验证用户登录处：
+			try:
+			    user = User.objects.get(username=username)
+            		    pwd = user.password
+           		    if check_password(password, pwd):
+			        if user.is_active:
+			            login(request, user)
+				    return xxxx
+			    else:
+			        return xxxx
+        		except User.DoesNotExist:
+            		    return xxxx
+		
   
