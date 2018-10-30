@@ -35,7 +35,7 @@
     2	Python 2.7.8
     
 ## Django2.1 
-    	1.urlpattern中要使用xxview.as_view()
+    1.urlpattern中要使用xxview.as_view()
 	2.使用外键的地方foreignkey要加上on_delete=models.CASCADE
 	3.使用pymysql要在__init__.py中加上
 		import pymysql
