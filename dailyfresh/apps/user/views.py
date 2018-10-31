@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views.generic import View
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import check_password, make_password
 from django.urls import reverse
 from django.http import HttpResponse
 from django.core.mail import send_mail
@@ -24,7 +25,7 @@ class RegisterView(View):
         '''进行数据处理'''
         # 接收数据
         username = request.POST.get('user_name')
-        password = request.POST.get('password')
+        password = request.POST.get('pwd')
         email = request.POST.get('email')
         allow = request.POST.get('allow')
 
@@ -50,9 +51,12 @@ class RegisterView(View):
             return  render(request, 'register.html', {'errmsg': '用户名已经存在'})
 
         # 业务处理， 进行用户注册
-        user = User.objects.create_user(username, email, password)
+        user = User.objects.create_user(username=username, email=email, password=password)
+        user.password = make_password(password)
         user.is_active = 0
         user.save()
+        print('password--------------%s'%(password))
+        print('pwd--------------%s'%(make_password(password)))
 
         # 加密用户的身份信息，生成激活token
         serializer = Serializer(settings.SECRET_KEY, 3600)
@@ -116,33 +120,38 @@ class LoginView(View):
             return render(request, 'login.html', {'errmsg': '数据不完整'})
 
         # 业务处理 登录校验
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            # 用户名密码正确
-            if user.is_active:
-                # 用户已激活
-                # 记录用户的登录状态
-                login(request, user)
+        try:
+            user = User.objects.get(username=username)
+            pwd = user.password
+            # 验证用户密码
+            if check_password(password, pwd):
+                # 用户名密码正确
+                if user.is_active:
+                    # 用户已激活
+                    # 记录用户的登录状态
+                    login(request, user)
 
-                # 跳转到首页
-                response = redirect(reverse('goods:index')) # HttpResponseRedirect
+                    # 跳转到首页
+                    response = redirect(reverse('goods:index')) # HttpResponseRedirect
 
-                # 判断是否需要记住用户名
-                remember = request.POST.get('remember')
+                    # 判断是否需要记住用户名
+                    remember = request.POST.get('remember')
 
-                if remember == 'on':
-                    # 记住用户名
-                    response.set_cookie('username', username, max_age=7*24*3600)
+                    if remember == 'on':
+                        # 记住用户名
+                        response.set_cookie('username', username, max_age=7*24*3600)
+                    else:
+                        response.delete_cookie('username')
+
+                    # 返回response
+                    return response
                 else:
-                    response.delete_cookie('username')
-
-                # 返回response
-                return response
+                    # 用户未激活
+                    return render(request, 'login.html', {'errmsg': '账户未激活'})
             else:
-                # 用户未激活
-                return  render(request, 'login.html', {'errmsg': '账户未激活'})
-        else:
-            # 用户名或密码错误
+                # 用户名或密码错误
+                return render(request, 'login.html', {'errmsg': '用户名或密码错误', 'n': username, 'p': password})
+        except User.DoesNotExist:
             return render(request, 'login.html', {'errmsg': '用户名或密码错误'})
 
 
