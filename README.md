@@ -7,6 +7,9 @@
 ## 如何在virtualenv环境中安装指定的python版本
     virtualenv 虚拟环境文件目录名 python=python3.6
     
+## import找不到模块解决方法
+    右击文件夹，点击Mark Directory as -> Sources Root 即可
+    
 ## 在系统级修改 Python 版本
     我们可以使用 update-alternatives 来为整个系统更改 Python 版本。以 root 身份登录，首先罗列出所有可用的 python 替代版本信息：
     
