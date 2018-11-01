@@ -6,6 +6,11 @@
 
 ## 如何在virtualenv环境中安装指定的python版本
     virtualenv 虚拟环境文件目录名 python=python3.6
+
+## FastFDS启动失败解决方法
+	执行 sudo service fdfs_trackerd start 
+	报 Failed to start fdfs_trackerd.service: Unit fdfs_trackerd.service not found.服务找不到时
+	执行 /usr/bin/fdfs_trackerd /etc/fdfs/tracker.conf start 即可，storage同理
     
 ## import找不到模块解决方法
     右击文件夹，点击Mark Directory as -> Sources Root 即可
