@@ -6,6 +6,14 @@
 
 ## 如何在virtualenv环境中安装指定的python版本
     virtualenv 虚拟环境文件目录名 python=python3.6
+    
+## 在Ubuntu中将python3设置为默认环境后，新建虚拟环境出现了如下错误：
+	Error while finding spec for 'virtualenvwrapper.hook_loader' (ImportError: No module named 'virtualenvwrapper')
+	解决方法:
+		依次执行以下命令：
+		sudo apt-get install python3-pip
+		sudo pip3 install virtualenv virtualenvwrapper
+		source .bashrc 
 
 ## FastFDS启动失败解决方法
 	执行 sudo service fdfs_trackerd start 
